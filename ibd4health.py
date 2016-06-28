@@ -4,17 +4,17 @@ import matplotlib.pyplot as plt
 
 npdata = np.load('ibd4health_diabetes.npz')
 data = npdata['data']
+__data = data
 features = npdata['features']
 labels = npdata['labels']
-colidx = dict([(k, v) for v, k in enumerate(features)])
+colidx = dict([(k.decode("utf-8"), v) for v, k in enumerate(features)])
 npdata.close()
 
 def column(name, data=None):
     """Returns the data column with given name."""
-    if data:
-        return data[:, colidx[name]]
-    else:
-        return __data[:, colidx[name]]
+    if data is None:
+        data = __data
+    return data[:, colidx[name]]
 
 def correlation(cola, colb, data=None):
     """Computes the correlation between columns cola and colb.
@@ -31,7 +31,6 @@ def correlation(cola, colb, data=None):
     return dfa.corrwith(dfb)
 
 def histogram(col, *args):
-    fig = plt.figure()
     if args:
         cols = [col]
         for i in args:
@@ -44,4 +43,3 @@ def histogram(col, *args):
     print(cols)
     plt.hist(xs, histtype='step', bins=50)
     plt.legend(cols[::-1])
-    return fig
