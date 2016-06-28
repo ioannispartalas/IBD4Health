@@ -1,22 +1,20 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-import cPickle as pickle
 
-__data = None
-__colidx = None
-features = None
-with open("ibd4health_diabetes.pkl", 'r') as f:
-    pkl = pickle.load(f)
-    __data = pkl['data']
-    features = pkl['features']
-    __colidx = dict([(k, v) for v, k in enumerate(features)])
+npdata = np.load('ibd4health_diabetes.npz')
+data = npdata['data']
+features = npdata['features']
+labels = npdata['labels']
+colidx = dict([(k, v) for v, k in enumerate(features)])
+npdata.close()
 
 def column(name, data=None):
     """Returns the data column with given name."""
     if data:
-        return data[:, __colidx[name]]
+        return data[:, colidx[name]]
     else:
-        return __data[:, __colidx[name]]
+        return __data[:, colidx[name]]
 
 def correlation(cola, colb, data=None):
     """Computes the correlation between columns cola and colb.
