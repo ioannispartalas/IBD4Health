@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 npdata = np.load('ibd4health_diabetes.npz')
 data = npdata['data']
+data[:, 1] = data[:, 1] > 0
 __data = data
 features = npdata['features']
 labels = npdata['labels']
